@@ -1,20 +1,20 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>For You</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg1:white; --bg2:#5A962D;
-    --ink:#0F2C4C; --soft:#29598F;
-    --sheet:#fffaf6; --line:#e3d6cd;
+    --bg1:white; --bg2:DarkGreen;
+    --ink:Maroon; --soft:Snow;
+    --sheet:white; --line:Snow;
   }
   html,body{margin:0;height:100%;overflow:hidden;color:var(--ink);
     background:radial-gradient(120% 80% at 50% 35%, var(--bg1), var(--bg2));
-    font-family:'Noto Sans Korean', Georgia, serif;
+    font-family:'Gowun Batang', serif;
     -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none;}
   #c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;}
 
@@ -37,14 +37,14 @@
   #backdrop.open{opacity:1;pointer-events:auto;}
 
   #sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:520px;
-    background:var(--sheet);border-radius:22px 22px 0 0;box-shadow:0 -12px 40px rgba(60,35,25,.18);
+    background:var(--sheet);border-radius:8px 8px 0 0;box-shadow:0 -12px 40px rgba(60,35,25,.18);
     padding:10px 16px calc(env(safe-area-inset-bottom) + 22px);max-height:86vh;overflow-y:auto;
     transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1);box-sizing:border-box;}
   #sheet.open{transform:none;}
   .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 12px;}
   #close{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;border-radius:50%;
     background:transparent;color:var(--soft);font-size:26px;line-height:1;cursor:pointer;}
-  .photo{width:100%;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:var(--line);}
+  .photo{width:100%;aspect-ratio:4/5;border-radius:4px;overflow:hidden;background:var(--line);}
   .photo img{width:100%;height:100%;object-fit:cover;display:block;}
   .ph{width:100%;height:100%;display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;
     color:#fff;font-size:15px;font-style:italic;}
@@ -58,10 +58,10 @@
 
 <header>
   <h1>생일 축하해</h1>
-  <div class="sub">여진에게</div>
+  <div class="sub">도영이 모은 꽃</div>
 </header>
 
-<div id="loading">꽃 가져오는 중...</div>
+<div id="loading">꽃 모으는 중...</div>
 <div id="hint">꽃 고르기</div>
 
 <div id="backdrop"></div>
@@ -103,6 +103,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
    ========================================================= */
 const MODEL = null; // 예: 'bouquet.glb'
 const ROTATE_SPEED = 1.0;
+const BOUQUET_Y = 0.1;
 
 const FLOWERS = [
   { id:'heart', mesh:'center_flower', title:'For you', photo:null, note:'',
@@ -253,7 +254,7 @@ function buildPlaceholder() {
   const ends = new THREE.Mesh(new THREE.CylinderGeometry(.12, .1, .6, 12), stemMat);
   ends.position.y = -2.15; root.add(ends);
 
-  root.position.y = .45;
+  root.position.y = BOUQUET_Y;
   done();
 }
 
@@ -273,6 +274,7 @@ function loadModel() {
       else console.warn('Blender에서 이 이름의 오브젝트를 못 찾음:', f.mesh);
     });
     root.add(m);
+    root.position.y = BOUQUET_Y;
     done();
   }, undefined, (err) => {
     console.warn('GLB 로드 실패, 임시 꽃으로 표시:', err);
