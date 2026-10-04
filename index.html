@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>For You</title>
+<title>에게</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg1:white; --bg2:DarkGreen;
-    --ink:Maroon; --soft:Snow;
+    --ink:Maroon; --soft:RosyBrown;
     --sheet:white; --line:Snow;
   }
   html,body{margin:0;height:100%;overflow:hidden;color:var(--ink);
@@ -20,7 +20,7 @@
 
   header{position:fixed;top:0;left:0;right:0;text-align:center;pointer-events:none;
     padding:calc(env(safe-area-inset-top) + 28px) 16px 0;}
-  h1{margin:0;font-weight:300;font-size:28px;letter-spacing:.02em;}
+  h1{margin:0;font-weight:400;font-size:28px;letter-spacing:.02em;}
   .sub{margin-top:4px;font-size:17px;font-style:normal;color:var(--soft);}
 
   #hint{position:fixed;left:0;right:0;text-align:center;pointer-events:none;
@@ -106,8 +106,8 @@ const ROTATE_SPEED = 1.0;
 const BOUQUET_Y = 0.1;
 
 const FLOWERS = [
-  { id:'heart', mesh:'center_flower', title:'For you', photo:null, note:'',
-    message:'Happy birthday.\nEvery flower here is one I saw\nand wanted to show you.',
+  { id:'heart', mesh:'center_flower', title:'에게', photo:null, note:'',
+    message:'생일 축하해요!\n처음으로 같이 보내는 생일\n같이 못 있어서 아쉽다. 그치?\n다음엔 진짜 꽃으로 줄게.\n얼른 봐요. 사랑해요.',
     type:'rose', color:'#c8324a' },
   { id:'f1', mesh:'flower_01', title:'Rose',      photo:'photos/01.jpg', note:'Seoul · May 2026',     type:'rose',      color:'#e7899a' },
   { id:'f2', mesh:'flower_02', title:'Daisy',     photo:'photos/02.jpg', note:'Farnham · June 2026',  type:'daisy',     color:'#ffffff' },
