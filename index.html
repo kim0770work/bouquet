@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>For You</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg1:white; --bg2:DarkGreen;
@@ -14,23 +14,23 @@
   }
   html,body{margin:0;height:100%;overflow:hidden;color:var(--ink);
     background:radial-gradient(120% 80% at 50% 35%, var(--bg1), var(--bg2));
-    font-family:'Gowun Batang', serif;
+    font-family:'Noto Sans KR', sans-serif;
     -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none;}
   #c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;}
 
   header{position:fixed;top:0;left:0;right:0;text-align:center;pointer-events:none;
     padding:calc(env(safe-area-inset-top) + 28px) 16px 0;}
-  h1{margin:0;font-weight:400;font-size:32px;letter-spacing:.02em;}
-  .sub{margin-top:4px;font-size:17px;font-style:italic;color:var(--soft);}
+  h1{margin:0;font-weight:300;font-size:28px;letter-spacing:.02em;}
+  .sub{margin-top:4px;font-size:17px;font-style:normal;color:var(--soft);}
 
   #hint{position:fixed;left:0;right:0;text-align:center;pointer-events:none;
-    bottom:calc(env(safe-area-inset-bottom) + 24px);font-size:16px;font-style:italic;color:var(--soft);
+    bottom:calc(env(safe-area-inset-bottom) + 24px);font-size:16px;font-style:normal;color:var(--soft);
     transition:opacity .6s;animation:breathe 2.4s ease-in-out infinite;}
   #hint.gone{opacity:0;animation:none;}
   @keyframes breathe{50%{opacity:.45}}
 
   #loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
-    font-style:italic;color:var(--soft);font-size:18px;transition:opacity .5s;pointer-events:none;}
+    font-style:normal;color:var(--soft);font-size:18px;transition:opacity .5s;pointer-events:none;}
   #loading.done{opacity:0;}
 
   #backdrop{position:fixed;inset:0;background:rgba(45,28,22,.28);opacity:0;pointer-events:none;transition:opacity .3s;}
@@ -47,9 +47,9 @@
   .photo{width:100%;aspect-ratio:4/5;border-radius:4px;overflow:hidden;background:var(--line);}
   .photo img{width:100%;height:100%;object-fit:cover;display:block;}
   .ph{width:100%;height:100%;display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;
-    color:#fff;font-size:15px;font-style:italic;}
+    color:#fff;font-size:15px;font-style:normal;}
   #title{margin:16px 0 2px;font-size:26px;font-weight:500;}
-  #note{margin:0;font-size:17px;font-style:italic;color:var(--soft);}
+  #note{margin:0;font-size:17px;font-style:normal;color:var(--soft);}
   #msg{margin:14px 0 0;font-size:19px;line-height:1.5;white-space:pre-line;}
 </style>
 </head>
