@@ -39,17 +39,23 @@
   #sheet{position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:520px;
     background:var(--sheet);border-radius:8px 8px 0 0;box-shadow:0 -12px 40px rgba(60,35,25,.18);
     padding:10px 16px calc(env(safe-area-inset-bottom) + 22px);max-height:86vh;overflow-y:auto;
-    transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1);box-sizing:border-box;}
+    transform:translateY(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1);box-sizing:border-box;
+    scrollbar-width:none;}
+  #sheet::-webkit-scrollbar{display:none;}
   #sheet.open{transform:none;}
   .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 12px;}
   #close{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;border-radius:50%;
     background:transparent;color:var(--soft);font-size:26px;line-height:1;cursor:pointer;}
-  .photo{width:80%;margin:6px auto 0;padding:7% 5.9% 26.7%;box-sizing:border-box;
-  background:#fbfaf7;border-radius:3px;box-shadow:0 8px 22px rgba(60,35,25,.18);}
+  /* 인스탁스 미니: --f가 카드 전체 너비. 화면 높이에 맞춰 자동으로 줄어들어 */
+  .photo{--f:min(72vw, 44vh, 380px);width:var(--f);margin:8px auto 6px;
+    padding:calc(var(--f) * .1) calc(var(--f) * .074) 0;box-sizing:border-box;
+    background:#fbfaf7;border-radius:3px;box-shadow:0 8px 22px rgba(60,35,25,.18);}
   .photo img{width:100%;aspect-ratio:46/62;object-fit:cover;display:block;}
   .ph{width:100%;aspect-ratio:46/62;display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;
   color:#fff;font-size:15px;}
   [hidden]{display:none !important;}
+  #cap{margin:0;width:100%;aspect-ratio:46/18;display:flex;align-items:center;justify-content:center;
+    font-size:14px;color:var(--ink);text-align:center;white-space:nowrap;overflow:hidden;}
   #title{margin:16px 0 2px;font-size:26px;font-weight:500;}
   #note{margin:0;font-size:17px;font-style:normal;color:var(--soft);}
   #msg{margin:14px 0 0;font-size:19px;line-height:1.5;white-space:pre-line;}
@@ -73,6 +79,7 @@
   <div class="photo" id="photoWrap">
     <img id="img" alt="">
     <div class="ph" id="ph" hidden></div>
+    <p id="cap"></p>
   </div>
   <h2 id="title"></h2>
   <p id="note"></p>
@@ -102,7 +109,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
      title    - 팝업 제목
      photo    - 사진 경로 (photos 폴더에 넣기). null이면 사진 없이 메시지만
      photoPos - (선택) 사진에서 보여줄 위치. '50% 50%'가 가운데, 앞 숫자 키우면 오른쪽
-     note     - 날짜/장소 같은 한 줄
+     note     - 날짜/장소. 사진 카드 아래에 'note + title' 한 줄로 나와
      message  - (선택) 긴 메시지. 편지 넣을 꽃에 쓰기
      type, color - 임시 꽃 모양/색 (model 있으면 무시됨)
    ========================================================= */
@@ -116,9 +123,9 @@ const FLOWERS = [
     message:'생일 축하해요!\n처음으로 같이 보내는 생일\n같이 못 있어서 아쉽다. 그치?\n곧 진짜 꽃으로 줄게.\n얼른 봐요.\n사랑해요.',
     type:'rose', color:'#c8324a' },
   { id:'f1', mesh:'flower_01', model:'flower_01.glb', title:'치커리', photo:'photos/261003.jpg', photoPos:'83% 50%',
-    note:'2026. 10. 3.', type:'daisy', color:'#a9bdf0' },
+    note:'2026년 10월 3일.', type:'daisy', color:'#a9bdf0' },
   { id:'f2', mesh:'flower_02', model:'flower_02.glb', title:'엉겅퀴', photo:'photos/260626_2.jpg',
-    note:'2026. 6. 26.', type:'anemone', color:'#d8c7b8' },
+    note:'2026년 6월 26일. 판햄에서.', type:'anemone', color:'#d8c7b8' },
   { id:'f3', mesh:'flower_03', title:'Tulip',     photo:'photos/03.jpg', note:'London · April 2026',  type:'tulip',     color:'#f0a64a' },
   { id:'f4', mesh:'flower_04', title:'Hydrangea', photo:'photos/04.jpg', note:'Seoul · July 2026',    type:'hydrangea', color:'#8fa6e0' },
   { id:'f5', mesh:'flower_05', title:'Anemone',   photo:'photos/05.jpg', note:'Somewhere · 2026',     type:'anemone',   color:'#b07cc6' },
@@ -133,7 +140,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.localClippingEnabled = true;
 // 포장지 안쪽에서 줄기를 잘라주는 면 (이 높이보다 아래는 안 보이게)
 const stemCut = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(BOUQUET_Y - 1.5));
-  
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
 
@@ -368,6 +375,10 @@ function openFlower(id, obj) {
   $('note').textContent = f.note || '';
   $('msg').textContent = f.message || '';
   $('msg').hidden = !f.message;
+  // 사진 있는 꽃: 인스탁스 아래 칸에 한 줄로 / 사진 없는 꽃(편지): 제목 + 메시지
+  $('cap').textContent = [f.note, f.title].filter(Boolean).join(' ');
+  $('title').hidden = !!f.photo;
+  $('note').hidden = true;
 
   if (f.photo) {
     $('photoWrap').hidden = false;
