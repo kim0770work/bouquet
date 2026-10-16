@@ -130,7 +130,10 @@ const FLOWERS = [
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
+renderer.localClippingEnabled = true;
+// 포장지 안쪽에서 줄기를 잘라주는 면 (이 높이보다 아래는 안 보이게)
+const stemCut = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(BOUQUET_Y - 1.5));
+  
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
 
@@ -239,7 +242,13 @@ function buildPlaceholder() {
           m.updateMatrixWorld(true);
           const box = new THREE.Box3().setFromObject(m);
           const c = box.getCenter(new THREE.Vector3());
-          m.position.set(-c.x, -box.min.y, -c.z);
+          // 꽃 머리 높이를 다른 꽃들과 맞추고, 남는 줄기는 포장지 안으로 쏙 들어가게
+          const sit = Math.min(-box.min.y, (L + 0.3) - box.max.y);
+          m.position.set(-c.x, sit, -c.z);
+          m.traverse(o => {
+            if (!o.material) return;
+            (Array.isArray(o.material) ? o.material : [o.material]).forEach(mt => { mt.clippingPlanes = [stemCut]; });
+          });
           flower.add(m);
           resolve();
         }, undefined, (err) => {
