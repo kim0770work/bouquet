@@ -230,8 +230,8 @@ function buildPlaceholder() {
 
   FLOWERS.forEach((f, i) => {
     const flower = new THREE.Group();
-    const tilt = i === 0 ? 0 : .3 + .14 * (i % 2);
-    const az = i * golden;
+    const tilt = f.tilt ?? (i === 0 ? 0 : .3 + .14 * (i % 2));
+    const az = f.turn !== undefined ? f.turn * Math.PI / 180 : i * golden;
     const L = i === 0 ? 2.75 : 2.55 - (i % 2) * .25;
 
     const addPlaceholder = () => {
