@@ -126,7 +126,7 @@ const FLOWERS = [
     note:'2026년 10월 3일, 런던에서,', type:'daisy', color:'#a9bdf0' },
   { id:'f2', mesh:'flower_02', model:'flower_02.glb', title:'엉겅퀴', photo:'photos/260626_2.jpg',
     note:'2026년 6월 26일, 판햄에서,', type:'anemone', color:'#d8c7b8' },
-  { id:'f3', mesh:'flower_03', model:'flower_03.glb', title:'블루벨', photo:'photos/260417.jpg',
+  { id:'f3', mesh:'flower_03', model:'flower_03.glb', lift:0.3, title:'블루벨', photo:'photos/260417.jpg',
     note:'2026년 4월 17일, 판햄에서,',  type:'tulip',     color:'#f0a64a' },
   { id:'f4', mesh:'flower_04', title:'Hydrangea', photo:'photos/04.jpg', note:'Seoul · July 2026',    type:'hydrangea', color:'#8fa6e0' },
   { id:'f5', mesh:'flower_05', title:'Anemone',   photo:'photos/05.jpg', note:'Somewhere · 2026',     type:'anemone',   color:'#b07cc6' },
@@ -251,7 +251,7 @@ function buildPlaceholder() {
           const box = new THREE.Box3().setFromObject(m);
           const c = box.getCenter(new THREE.Vector3());
           // 꽃 머리 높이를 다른 꽃들과 맞추고, 남는 줄기는 포장지 안으로 쏙 들어가게
-          const sit = Math.min(-box.min.y, (L + 0.3) - box.max.y);
+          const sit = Math.min(-box.min.y, (L + 0.3 + (f.lift || 0)) - box.max.y);
           m.position.set(-c.x, sit, -c.z);
           m.traverse(o => {
             if (!o.material) return;
