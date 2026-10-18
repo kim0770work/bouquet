@@ -102,8 +102,9 @@ const MODEL = null; // 예: 'bouquet.glb'
 const ROTATE_SPEED = 1.0;
 const BOUQUET_Y = -0.1;
 const WRAP = 'wrap.glb';   // Blender에서 만든 포장지+리본 파일. null이면 임시 포장지
-const WRAP_HEIGHT = 1.9;   // 포장지 전체 높이 (크면 커짐)
-const WRAP_BOTTOM = -2.0;  // 포장지 아래 끝 높이 (올리려면 크게, 내리려면 작게)
+const WRAP_SCALE = 0.65;   // 포장지만 따로 키우거나 줄이기 (1이면 Blender 비율 그대로)
+const WRAP_Y = 0;          // 포장지 위아래 위치 (+면 위로)
+const STEM_TAIL = 0.8;     // 리본 아래로 줄기가 얼마나 삐져나올지 (0이면 안 보임)
 const MODEL_SCALE = 24;  // Blender 크기 → 화면 크기. 꽃이 전체적으로 크거나 작으면 이 숫자만 바꿔
 
 const FLOWERS = [
@@ -151,7 +152,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true })
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.localClippingEnabled = true;
 // 포장지 안쪽에서 줄기를 잘라주는 면 (이 높이보다 아래는 안 보이게)
-const stemCut = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(BOUQUET_Y - 1.5));
+const stemCut = new THREE.Plane(new THREE.Vector3(0, 1, 0), -(BOUQUET_Y - 1.6 - STEM_TAIL));
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
@@ -299,24 +300,24 @@ function buildPlaceholder() {
     ribbon.rotation.x = Math.PI / 2; ribbon.position.y = -1.45; root.add(ribbon);
   };
   if (WRAP) {
-  // Blender 포장지를 불러와서 크기는 WRAP_HEIGHT에 맞추고, 가운데 정렬
+    // 포장지도 꽃이랑 같은 MODEL_SCALE로 → Blender에서 맞춘 비율 그대로.
+    // 'ribbon'이라는 오브젝트가 있으면 그 높이를 줄기 모이는 자리에 맞춤
     loads.push(new Promise(resolve => {
       new GLTFLoader().load(WRAP, (gltf) => {
         const w = gltf.scene;
+        w.scale.setScalar(MODEL_SCALE * WRAP_SCALE);
         w.updateMatrixWorld(true);
-        let box = new THREE.Box3().setFromObject(w);
-        const s = WRAP_HEIGHT / (box.max.y - box.min.y);
-        w.scale.setScalar(s);
-        w.updateMatrixWorld(true);
-        box = new THREE.Box3().setFromObject(w);
+        const box = new THREE.Box3().setFromObject(w);
         const c = box.getCenter(new THREE.Vector3());
-        w.position.set(-c.x, WRAP_BOTTOM - box.min.y, -c.z);
+        const rib = w.getObjectByName('ribbon');
+        const tieY = rib ? new THREE.Box3().setFromObject(rib).getCenter(new THREE.Vector3()).y
+                         : box.min.y + (box.max.y - box.min.y) * 0.2;
+        w.position.set(-c.x, base.y - tieY + WRAP_Y, -c.z);
         root.add(w);
         resolve();
       }, undefined, (err) => {
         console.warn('포장지 파일을 못 불러옴, 임시 포장지로 표시:', err);
-        addWrapPlaceholder();
-        resolve();
+        addWrapPlaceholder(); resolve();
       });
     }));
   } else {
