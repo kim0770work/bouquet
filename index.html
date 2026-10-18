@@ -101,6 +101,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 const MODEL = null; // 예: 'bouquet.glb'
 const ROTATE_SPEED = 1.0;
 const BOUQUET_Y = -0.1;
+const WRAP = 'wrap.glb';   // Blender에서 만든 포장지+리본 파일. null이면 임시 포장지
+const WRAP_HEIGHT = 1.9;   // 포장지 전체 높이 (크면 커짐)
+const WRAP_BOTTOM = -2.0;  // 포장지 아래 끝 높이 (올리려면 크게, 내리려면 작게)
 const MODEL_SCALE = 24;  // Blender 크기 → 화면 크기. 꽃이 전체적으로 크거나 작으면 이 숫자만 바꿔
 
 const FLOWERS = [
@@ -284,34 +287,41 @@ function buildPlaceholder() {
     root.add(flower);
   });
 
-  // leaves
-  const leafMat = mat('#6f9a5b');
-  for (let i = 0; i < 7; i++) {
-    const pivot = new THREE.Group();
-    pivot.position.set(0, -.35, 0);
-    pivot.rotation.y = i / 7 * Math.PI * 2 + .2;
-    const leaf = new THREE.Mesh(sphereGeo, leafMat);
-    leaf.scale.set(.13, .025, .5);
-    leaf.rotation.x = -.75;
-    leaf.position.set(0, Math.sin(.75) * .45, .55 + Math.cos(.75) * .45);
-    pivot.add(leaf); root.add(pivot);
+  // wrapping paper + ribbon
+  const addWrapPlaceholder = () => {
+    const wrap = new THREE.Mesh(new THREE.CylinderGeometry(1.0, .18, 1.7, 40, 1, true),
+      mat('#efe2d1', { roughness:.95 }));
+    wrap.position.y = -1.05; root.add(wrap);
+    const inner = new THREE.Mesh(new THREE.CylinderGeometry(.98, .17, 1.68, 40, 1, true),
+      mat('#d9b9a8', { roughness:.95, side:THREE.BackSide }));
+    inner.position.y = -1.05; root.add(inner);
+    const ribbon = new THREE.Mesh(new THREE.TorusGeometry(.41, .045, 10, 40), mat('#b8485c', { roughness:.4 }));
+    ribbon.rotation.x = Math.PI / 2; ribbon.position.y = -1.45; root.add(ribbon);
+  };
+  if (WRAP) {
+  // Blender 포장지를 불러와서 크기는 WRAP_HEIGHT에 맞추고, 가운데 정렬
+    loads.push(new Promise(resolve => {
+      new GLTFLoader().load(WRAP, (gltf) => {
+        const w = gltf.scene;
+        w.updateMatrixWorld(true);
+        let box = new THREE.Box3().setFromObject(w);
+        const s = WRAP_HEIGHT / (box.max.y - box.min.y);
+        w.scale.setScalar(s);
+        w.updateMatrixWorld(true);
+        box = new THREE.Box3().setFromObject(w);
+        const c = box.getCenter(new THREE.Vector3());
+        w.position.set(-c.x, WRAP_BOTTOM - box.min.y, -c.z);
+        root.add(w);
+        resolve();
+      }, undefined, (err) => {
+        console.warn('포장지 파일을 못 불러옴, 임시 포장지로 표시:', err);
+        addWrapPlaceholder();
+        resolve();
+      });
+    }));
+  } else {
+    addWrapPlaceholder();
   }
-
-  // wrapping paper
-  const wrap = new THREE.Mesh(new THREE.CylinderGeometry(1.0, .18, 1.7, 40, 1, true),
-    mat('#efe2d1', { roughness:.95 }));
-  wrap.position.y = -1.05; root.add(wrap);
-  const inner = new THREE.Mesh(new THREE.CylinderGeometry(.98, .17, 1.68, 40, 1, true),
-    mat('#d9b9a8', { roughness:.95, side:THREE.BackSide }));
-  inner.position.y = -1.05; root.add(inner);
-
-  // ribbon
-  const ribbon = new THREE.Mesh(new THREE.TorusGeometry(.41, .045, 10, 40), mat('#b8485c', { roughness:.4 }));
-  ribbon.rotation.x = Math.PI / 2; ribbon.position.y = -1.45; root.add(ribbon);
-
-  // stem ends
-  const ends = new THREE.Mesh(new THREE.CylinderGeometry(.12, .1, .6, 12), stemMat);
-  ends.position.y = -2.15; root.add(ends);
 
   root.position.y = BOUQUET_Y;
   Promise.all(loads).then(done);
