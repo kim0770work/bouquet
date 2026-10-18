@@ -55,10 +55,10 @@
   color:#fff;font-size:15px;}
   [hidden]{display:none !important;}
   #cap{margin:0;width:100%;aspect-ratio:46/18;display:flex;align-items:center;justify-content:center;
-    font-size:14px;color:var(--ink);text-align:center;white-space:nowrap;overflow:hidden;}
+    font-size:14px;line-height:1.4;color:var(--ink);text-align:center;word-break:keep-all;overflow:hidden;}
   #title{margin:16px 0 2px;font-size:26px;font-weight:500;}
   #note{margin:0;font-size:17px;font-style:normal;color:var(--soft);}
-  #msg{margin:14px 0 0;font-size:19px;line-height:1.5;white-space:pre-line;}
+  #msg{margin:14px 0 4px;font-size:16px;line-height:1.7;white-space:pre-line;text-align:center;}
 </style>
 </head>
 <body>
@@ -119,17 +119,24 @@ const BOUQUET_Y = 0.1;
 const MODEL_SCALE = 24;  // Blender 크기 → 화면 크기. 꽃이 전체적으로 크거나 작으면 이 숫자만 바꿔
 
 const FLOWERS = [
-  { id:'heart', mesh:'center_flower', title:'YJ에게', photo:null, note:'',
-    message:'생일 축하해요!\n오늘도 역시 제일 좋은 것만\n가득 주고 싶은 맘으로\n준비했어.\n\n처음 맞는 자기 생일\n같이 못 있어서 아쉽다. 그치?\n\n곧 진짜 꽃으로 줄게.\n\n얼른 봐요.\n조심히 와.\n\n사랑해요.',
+  { id:'heart', mesh:'center_flower', model:'center_flower.glb',
+    title:'빨간 꽃 이름', photo:'photos/빨간꽃사진.jpg', note:'2026년 0월 0일, 어디에서,',
+    message:'YJ에게\n\n생일 축하해요!\n오늘도 역시 제일 좋은 것만\n가득 주고 싶은 맘으로\n준비했어.\n\n처음 맞는 자기 생일\n같이 못 있어서 아쉽다. 그치?\n\n곧 진짜 꽃으로 줄게.\n\n얼른 봐요.\n조심히 와.\n\n사랑해요.',
     type:'rose', color:'#c8324a' },
   { id:'f1', mesh:'flower_01', model:'flower_01.glb', title:'치커리', photo:'photos/261003.jpg', photoPos:'83% 50%',
-    note:'2026년 10월 3일, 런던에서,', type:'daisy', color:'#a9bdf0' },
+    note:'2026년 10월 3일, 런던에서,',
+    message:'',
+    type:'daisy', color:'#a9bdf0' },
   { id:'f2', mesh:'flower_02', model:'flower_02.glb', title:'엉겅퀴', photo:'photos/260626_2.jpg',
-    note:'2026년 6월 26일, 판햄에서,', type:'anemone', color:'#d8c7b8' },
+    note:'2026년 6월 26일, 판햄에서,',
+    message:'',
+    type:'anemone', color:'#d8c7b8' },
   { id:'f5', mesh:'flower_05', title:'Anemone',   photo:'photos/05.jpg', note:'Somewhere · 2026',     type:'anemone',   color:'#b07cc6' },
   { id:'f4', mesh:'flower_04', title:'Hydrangea', photo:'photos/04.jpg', note:'Seoul · July 2026',    type:'hydrangea', color:'#8fa6e0' },
   { id:'f3', mesh:'flower_03', model:'flower_03.glb', lift:0.7, tilt:0.3, title:'블루벨', photo:'photos/260417.jpg',
-    note:'2026년 4월 17일, 판햄에서,',  type:'tulip',     color:'#f0a64a' },
+    note:'2026년 4월 17일, 판햄에서,',
+    message:'',
+    type:'tulip',     color:'#f0a64a' },
   { id:'f6', mesh:'flower_06', title:'Cosmos',    photo:'photos/06.jpg', note:'Somewhere · 2026',     type:'daisy',     color:'#f3b7cf' },
   { id:'f7', mesh:'flower_07', title:'Tulip',     photo:'photos/07.jpg', note:'Somewhere · 2026',     type:'tulip',     color:'#f6d6e0' },
 ];
