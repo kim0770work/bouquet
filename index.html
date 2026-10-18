@@ -98,21 +98,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-/* =========================================================
-   여기만 고치면 돼
-   ---------------------------------------------------------
-   MODEL : 꽃다발 전체를 한 파일로 만들었을 때 (.glb). 꽃을 하나씩 따로 넣는 동안은 null
-   FLOWERS:
-     model    - 이 꽃의 .glb 파일 (꽃 하나씩 내보낸 것). null이면 임시 꽃으로 표시
-     scale    - (선택) 이 꽃만 크기 조절. 기본 1
-     mesh     - Blender 꽃 엠프티 이름 (꽃다발 전체 MODEL 쓸 때 필요)
-     title    - 팝업 제목
-     photo    - 사진 경로 (photos 폴더에 넣기). null이면 사진 없이 메시지만
-     photoPos - (선택) 사진에서 보여줄 위치. '50% 50%'가 가운데, 앞 숫자 키우면 오른쪽
-     note     - 날짜/장소. 사진 카드 아래에 'note + title' 한 줄로 나와
-     message  - (선택) 긴 메시지. 편지 넣을 꽃에 쓰기
-     type, color - 임시 꽃 모양/색 (model 있으면 무시됨)
-   ========================================================= */
 const MODEL = null; // 예: 'bouquet.glb'
 const ROTATE_SPEED = 1.0;
 const BOUQUET_Y = 0.1;
@@ -257,7 +242,7 @@ function buildPlaceholder() {
           m.updateMatrixWorld(true);
           const box = new THREE.Box3().setFromObject(m);
           const c = box.getCenter(new THREE.Vector3());
-          // 꽃 머리 높이를 다른 꽃들과 맞추고, 남는 줄기는 포장지 안으로 쏙 들어가게
+          // 꽃 머리 높이를 다른 꽃들과 맞추고, 남는 줄기는 포장지 안으로 들어가게
           const sit = Math.min(-box.min.y, (L + 0.3 + (f.lift || 0)) - box.max.y);
           m.position.set(-c.x, sit, -c.z);
           m.traverse(o => {
