@@ -70,7 +70,7 @@
 </header>
 
 <div id="loading">꽃 모으는 중...</div>
-<div id="hint">꽃 고르기</div>
+<div id="hint"></div>
 
 <div id="backdrop"></div>
 <div id="sheet" role="dialog" aria-modal="true">
@@ -100,7 +100,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const MODEL = null; // 예: 'bouquet.glb'
 const ROTATE_SPEED = 1.0;
-const BOUQUET_Y = 0.1;
+const BOUQUET_Y = -0.1;
 const MODEL_SCALE = 24;  // Blender 크기 → 화면 크기. 꽃이 전체적으로 크거나 작으면 이 숫자만 바꿔
 
 const FLOWERS = [
