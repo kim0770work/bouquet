@@ -110,7 +110,7 @@ const STEM_TAIL = 0.8;     // 리본 아래로 줄기가 나오는 길이. 0이�
 const MODEL_SCALE = 24;  // Blender 크기 → 화면 크기. 꽃이 전체적으로 크거나 작으면 이 숫자만 바꿔
 
 const FLOWERS = [
-  { id:'heart', mesh:'center_flower', model:'center_flower.glb', title:'양귀비', photo:'photos/260721.jpg',
+  { id:'heart', mesh:'center_flower', model:'center_flower.glb', lift:0.05, title:'양귀비', photo:'photos/260721.jpg',
     note:'2026년 7월 21일, 판햄에서,',
     message:'\nYJ에게\n\n생일 축하해요!\n오늘도 역시 제일 좋은 것만\n가득 주고 싶은 맘으로\n준비했어.\n\n처음 맞는 자기 생일\n같이 못 있어서 아쉽다. 그치?\n\n곧 진짜 꽃으로 줄게.\n\n얼른 봐요.\n아프지 마.\n조심히 와.\n\n사랑해요.\n',
     type:'rose', color:'#c8324a' },
@@ -125,7 +125,7 @@ const FLOWERS = [
     message:'\n261018\n\n안녕 내 여자친구\n\n오늘은 날이 좋아서 블라인드를 끝까지 올렸더니 방이 훤해졌어. 그래서 선반 밑에 보이지 않던 비실한 거미줄을 봐버렸어. 어떤 거미 집인지는 모르겠어. 출가했나 봐. 얘랑 같이 살까? 아니면 집 철거할까?\n\n자기 오기 전엔 대청소를 할 거야.\n자기 공주니까 안 깨끗한 기숙사\n최대한 깨끗하게 바꿔둘게 복도부터 부엌까지 내 방 밖으로도\n\n밖에 길도 청소할까? ㅎㅎ\n런던 버스도 스탠스테드 공항철도도 청소할까.\n그만큼 좋아해.\n',
     type:'daisy', color:'#f3b7cf' },
   
-  { id:'f5', mesh:'flower_07', model:'flower_07.glb', title:'야생 당근', photo:'photos/260607.jpg',
+  { id:'f5', mesh:'flower_07', model:'flower_07.glb', lift:-0.3, title:'야생 당근', photo:'photos/260607.jpg',
     note:'2026년 6월 7일, 판햄에서,',
     message:'\n선물 얘기\n\n고민 끝에 결정한 선물. **** **** ** ** 입니다. ** *** 사는 거 나는 처음이야.\n\n사려고 마음먹었는데. 자기 이미 있으면 어쩌지. 있어도 같은 *** 아니길 바라.\n\n자길 기쁘게 해주고 싶으니까 자기 맘에 쏙 들, 아주 예쁜 선물을 하려고 많이 고민했어. 아마도 이 **** 자기 맞춤형 선물은 아니겠지만\n\n서로 많이 ****.\n\n*** 들고 다녀!\n**** 들고 다니기 좋은 크기 *****.\n',
     type:'anemone', color:'#b07cc6' },
